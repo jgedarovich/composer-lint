@@ -31,14 +31,52 @@ final class LintPlugin implements PluginInterface, EventSubscriberInterface
     private $linter;
 
     /**
+     * @var Array
+     */
+    private $config;
+
+    /**
+     * @var ArrayOfLintRules
+     */
+    private $lint_rules;
+
+    /*
+     * it felt wierd to have the config for the linter exist
+     * in the thing being linted - so I broke this out into separate file
+     *
+     * todo: maybe throw exception if there are no configured lint rules
+     */
+    public function __construct( $config = [] ){
+        if( empty($config) &&  file_exists('../.composerlint') ) {
+            $this->config = json_decode(file_get_contents('../composerlint'), true);
+        } else {
+            $this->config = $config;
+        }
+        $this->lint_rules = new ArrayOfLintRules();
+        $all_lint_rules = array_map(function($filename) {
+            return basename($filename, '.php');
+        },glob(dirname(__FILE__).'/LintRules/*.php'));
+
+        if ( isset($config['lint_rules']))  {
+            foreach ( $config['lint_rules'] as $lint_class_name => $lint_class_config ) {
+                //check if it's one of the available classes
+                if ( in_array($lint_class_name, $all_lint_rules) ) {
+                    $namespaced_lint_class_name=__NAMESPACE__."\\".$lint_class_name;
+                    //todo - make sure config is an array or some other type?
+                    $this->lint_rules[] = new $namespaced_lint_class_name($lint_class_config);
+                }
+            }
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function activate(Composer $composer, IOInterface $io)
     {
         $this->composer = $composer;
         $this->io = $io;
-        $config = $this->composer->getConfig()->get('sllh-composer-lint');
-        $this->linter = new Linter($config ?: array());
+        $this->linter = new Linter($this->lint_rules);
     }
 
     /**
@@ -60,6 +98,7 @@ final class LintPlugin implements PluginInterface, EventSubscriberInterface
      */
     public function command(CommandEvent $event)
     {
+         //eval(\Psy\sh());
         if ('validate' !== $event->getCommandName()) {
             return true;
         }

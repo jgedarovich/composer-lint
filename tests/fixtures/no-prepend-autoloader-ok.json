@@ -1,0 +1,8 @@
+{
+    "config": {
+        "prepend-autoloader": false,
+        "sllh-composer-lint": {
+            "type": false
+        }
+    }
+}

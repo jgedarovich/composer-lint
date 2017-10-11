@@ -1,0 +1,10 @@
+{
+    "config": {
+        "classmap-authoritative":false,
+        "sllh-composer-lint": {
+            "type": false,
+            "classmap-authoritative":false
+        }
+
+    }
+}

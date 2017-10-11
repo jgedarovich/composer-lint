@@ -1,0 +1,8 @@
+{
+    "config": {
+        "secure-http":false,
+        "sllh-composer-lint": {
+            "type": false
+        }
+    }
+}

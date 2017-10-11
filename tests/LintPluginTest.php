@@ -51,9 +51,17 @@ final class LintPluginTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateCommand()
     {
-        $this->addComposerPlugin(new LintPlugin());
+        $config = [
+            "lint_rules" => [
+                'SortedPackagesLintRule' => true,
+                'PhpLintRule' => true,
+                'TypeLintRule' => true,
+                'VersionConstraintsLintRule' => true,
+            ]
+        ];
+        $this->addComposerPlugin(new LintPlugin($config));
 
-        $input = $this->getMock('Symfony\Component\Console\Input\InputInterface');
+        $input = $this->createMock('Symfony\Component\Console\Input\InputInterface');
         $input->expects($this->once())->method('getArgument')->with('file')
             ->willReturn(__DIR__.'/fixtures/composer.json');
 
@@ -63,7 +71,7 @@ final class LintPluginTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(<<<'EOF'
 Links under require section are not sorted.
 Links under require-dev section are not sorted.
-You must specifiy the PHP requirement.
+You must specify the PHP requirement.
 The package type is not specified.
 Requirement format of 'sllh/php-cs-fixer-styleci-bridge:~2.0' is not valid. Should be '^2.0'.
 
@@ -82,10 +90,14 @@ EOF
                 ),
             ),
         ));
+        $config = [
+            "lint_rules" => [
+                'SortedPackagesLintRule' => true,
+            ]
+        ];
+        $this->addComposerPlugin(new LintPlugin($config));
 
-        $this->addComposerPlugin(new LintPlugin());
-
-        $input = $this->getMock('Symfony\Component\Console\Input\InputInterface');
+        $input = $this->createMock('Symfony\Component\Console\Input\InputInterface');
         $input->expects($this->once())->method('getArgument')->with('file')
             ->willReturn(__DIR__.'/fixtures/composer.json');
 
@@ -105,9 +117,14 @@ EOF
      */
     public function testDummyCommand()
     {
+        $config = [
+            "lint_rules" => [
+                'SortedPackagesLintRule' => true,
+            ]
+        ];
         $this->addComposerPlugin(new LintPlugin());
 
-        $input = $this->getMock('Symfony\Component\Console\Input\InputInterface');
+        $input = $this->createMock('Symfony\Component\Console\Input\InputInterface');
         $input->expects($this->never())->method('getArgument')->with('file');
 
         $commandEvent = new CommandEvent(PluginEvents::COMMAND, 'dummy', $input, new NullOutput());

@@ -1,0 +1,9 @@
+{
+    "config": {
+        "use-include-path":true,
+        "sllh-composer-lint": {
+            "type": false,
+            "no-use-include-path":false
+        }
+    }
+}

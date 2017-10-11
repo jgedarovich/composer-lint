@@ -1,5 +1,5 @@
 {
-    "name": "sllh/composer-lint",
+    "name": "jgedarovich/composer-lint",
     "description": "Extends the composer validate command with extra rules",
     "keywords": ["composer", "plugin", "validate", "lint"],
     "type": "composer-plugin",
@@ -8,6 +8,10 @@
         {
             "name": "Sullivan SENECHAL",
             "email": "soullivaneuh@gmail.com"
+        },
+        {
+            "name": "james gedarovich",
+            "email": "james.gedarovich@gmail.com"
         }
     ],
     "require": {

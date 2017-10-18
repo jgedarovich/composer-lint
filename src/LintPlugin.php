@@ -44,11 +44,13 @@ final class LintPlugin implements PluginInterface, EventSubscriberInterface
      * it felt wierd to have the config for the linter exist
      * in the thing being linted - so I broke this out into separate file
      *
-     * todo: maybe throw exception if there are no configured lint rules
+     * todo make this not suck
      */
     public function __construct( $config = [] ){
-        if( empty($config) &&  file_exists('../.composerlint') ) {
-            $this->config = json_decode(file_get_contents('../composerlint'), true);
+        // /vendor/jgedarovich/composer-lint/src/
+        if( empty($config) &&  file_exists('../../../../.composerlint') ) {
+            //todo try/catch error - or splt this confi gparsing login into another class
+            $this->config = json_decode(file_get_contents('../../../../.composerlint'), true);
         } else {
             $this->config = $config;
         }

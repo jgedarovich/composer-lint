@@ -1,0 +1,10 @@
+{
+   "config": {
+        "repositories": {
+            "packagist.org": {
+                "url": "http://packagist.org/"
+            }
+        }
+    }
+
+}

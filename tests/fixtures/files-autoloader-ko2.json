@@ -1,0 +1,10 @@
+
+{
+    "name": "foo/bar",
+    "description": "Fake package. LULZ.",
+    "license": "MIT",
+    "require": {
+        "aws/aws-sdk-php": "^3.24",
+        "googleads/googleads-php-lib": "30.0.0"
+    }
+}

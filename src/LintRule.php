@@ -8,7 +8,7 @@ interface LintRule {
      * @param Array $errors - an array to add erros to - this will be what gets returned
      * @return void
      */
-    public function __construct($config);
+    public function __construct(Array $config);
 
     /*
      * @param Array $manifest - composer.json in array format

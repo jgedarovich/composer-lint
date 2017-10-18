@@ -6,7 +6,7 @@ class SecureHttpLintRule implements LintRule {
     /*
      * {@inheritdoc }
      */
-    public function __construct($config) {
+    public function __construct(Array $config) {
     }
 
     /*

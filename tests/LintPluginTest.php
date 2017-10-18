@@ -53,10 +53,10 @@ final class LintPluginTest extends \PHPUnit_Framework_TestCase
     {
         $config = [
             "lint_rules" => [
-                'SortedPackagesLintRule' => true,
-                'PhpLintRule' => true,
-                'TypeLintRule' => true,
-                'VersionConstraintsLintRule' => true,
+                'SortedPackagesLintRule' => [],
+                'PhpLintRule' => [],
+                'TypeLintRule' => [],
+                'VersionConstraintsLintRule' => [],
             ]
         ];
         $this->addComposerPlugin(new LintPlugin($config));
@@ -92,7 +92,7 @@ EOF
         ));
         $config = [
             "lint_rules" => [
-                'SortedPackagesLintRule' => true,
+                'SortedPackagesLintRule' => [],
             ]
         ];
         $this->addComposerPlugin(new LintPlugin($config));

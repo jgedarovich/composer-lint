@@ -30,14 +30,12 @@ final class LinterTest extends \PHPUnit_Framework_TestCase
                     'composer.json' => __DIR__.'/fixtures/files-autoloader-ko.json'
                 ),
                 [
-                    'no-files-autoloader'=>[
-                        "ignore" => [
-                            "vendor/guzzlehttp/guzzle/src/functions_include.php",
-                            "vendor/guzzlehttp/promises/src/functions_include.php",
-                            "vendor/guzzlehttp/psr7/src/functions_include.php",
-                        ],
-                        "custom-comment" =>  "\nIn order to use ||||||top_level_package_name|||| properly, you'll need to add the necessary requires ONLY to the files that use this package so that they are only loaded on requests that use it. and in order to squelch this lint, add each of the above file names to .composerlintignore\n\n"
-                    ]
+                    "ignore" => [
+                        "vendor/guzzlehttp/guzzle/src/functions_include.php",
+                        "vendor/guzzlehttp/promises/src/functions_include.php",
+                        "vendor/guzzlehttp/psr7/src/functions_include.php",
+                    ],
+                    "custom-comment" =>  "\nIn order to use ||||||top_level_package_name|||| properly, you'll need to add the necessary requires ONLY to the files that use this package so that they are only loaded on requests that use it. and in order to squelch this lint, add each of the above file names to .composerlintignore\n\n"
                 ],
                 0
             ),
@@ -69,17 +67,15 @@ final class LinterTest extends \PHPUnit_Framework_TestCase
                     'composer.json' => __DIR__.'/fixtures/files-autoloader-ko2.json'
                 ),
                 [
-                    'no-files-autoloader'=>[
-                        "ignore" => [
-                            "vendor/guzzlehttp/guzzle/src/functions_include.php",
-                            "vendor/guzzlehttp/promises/src/functions_include.php",
-                            "vendor/guzzlehttp/psr7/src/functions_include.php",
-                            "vendor/aws/aws-sdk-php/src/functions.php",
-                            "vendor/mtdowling/jmespath.php/src/JmesPath.php"
+                    "ignore" => [
+                        "vendor/guzzlehttp/guzzle/src/functions_include.php",
+                        "vendor/guzzlehttp/promises/src/functions_include.php",
+                        "vendor/guzzlehttp/psr7/src/functions_include.php",
+                        "vendor/aws/aws-sdk-php/src/functions.php",
+                        "vendor/mtdowling/jmespath.php/src/JmesPath.php"
 
-                        ],
-                        "custom-comment" =>  "\nIn order to use ||||||top_level_package_name|||| properly, you'll need to add the necessary requires ONLY to the files that use this package so that they are only loaded on requests that use it. and in order to squelch this lint, add each of the above file names to .composerlintignore\n\n"
-                    ]
+                    ],
+                    "custom-comment" =>  "\nIn order to use ||||||top_level_package_name|||| properly, you'll need to add the necessary requires ONLY to the files that use this package so that they are only loaded on requests that use it. and in order to squelch this lint, add each of the above file names to .composerlintignore\n\n"
                 ],
                 0
             ),

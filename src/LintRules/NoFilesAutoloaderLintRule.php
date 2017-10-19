@@ -52,8 +52,8 @@ class NoFilesAutoloaderLintRule implements LintRule {
      */
     function __construct( Array $config = [], $dir= "." ) {
         $this->config = $config;
-        $this->files_safelist = isset($config['no-files-autoloader']['ignore']) && is_array($config['no-files-autoloader']['ignore']) ? $config['no-files-autoloader']['ignore'] :[];
-        $this->custom_comment = isset($config['no-files-autoloader']['custom-comment']) && is_array($config['no-files-autoloader']['custom-comment']) ? $config['no-files-autoloader']['custom-comment'] : "";
+        $this->files_safelist = isset($config['ignore']) && is_array($config['ignore']) ? $config['ignore'] :[];
+        $this->custom_comment = isset($config['custom-comment']) && is_array($config['custom-comment']) ? $config['custom-comment'] : "";
         $analyzer = new \JMS\Composer\DependencyAnalyzer();
 
         /*

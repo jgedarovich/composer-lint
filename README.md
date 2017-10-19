@@ -51,3 +51,25 @@ You can configure the plugin via a file called `/.composerlint` in the root
 
 where 'lint-rule-class-name's  are any of the classes from the
 [src/LintRules/](src/LintRules) directory
+
+some lint rules take custom configuration - for instance:
+
+```json
+"RepositoryUrlSafelistLintRule":{
+    "repository-safelist": [
+        "http://packagist.org/",
+        "https://github.com/jgedarovich/composer-lint"
+    ]
+}
+```
+
+and
+
+```json
+"NoFilesAutoloaderLintRule":{
+    "ignore":[
+        "vendor/guzzlehttp/guzzle/src/functions_include.php",
+    ],
+    "custom-comment":"\n\n custom error message here \n\n"
+}
+```

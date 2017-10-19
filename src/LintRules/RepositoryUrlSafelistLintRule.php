@@ -20,7 +20,7 @@ class RepositoryUrlSafelistLintRule implements LintRule {
      */
     public function validate($manifest, $errors) {
 
-        $repositories = isset($manifest['config']['repositories']) && is_array($manifest['config']['repositories']) ? $manifest['config']['repositories'] : [];
+        $repositories = isset($manifest['repositories']) && is_array($manifest['repositories']) ? $manifest['repositories'] : [];
         
         //collect list of repositories from manifest
         $repository_urls = array_reduce(
@@ -33,6 +33,7 @@ class RepositoryUrlSafelistLintRule implements LintRule {
             []
         );
 
+eval(\Psy\sh());
         if ( 
             array_key_exists("repository-safelist", $this->config) &&
             is_array($this->config['repository-safelist']) 

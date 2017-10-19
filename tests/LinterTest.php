@@ -203,7 +203,7 @@ final class LinterTest extends \PHPUnit_Framework_TestCase
             array('\SLLH\ComposerLint\NoPackagistLintRule',__DIR__.'/fixtures/no-packagist-ko.json', 1),
             array('\SLLH\ComposerLint\RepositoryUrlSafelistLintRule',__DIR__.'/fixtures/repository-safelist-ok.json', 0, ['repository-safelist'=>["http://packagist.org/"]]),
             array('\SLLH\ComposerLint\RepositoryUrlSafelistLintRule',__DIR__.'/fixtures/repository-safelist-ko.json', 1),
-            array('\SLLH\ComposerLint\RepositoryUrlSafelistLintRule',__DIR__.'/fixtures/repository-safelist-ko.json', 0, ['repository-safelist'=>["http://packagist.org/"]]),
+            array('\SLLH\ComposerLint\RepositoryUrlSafelistLintRule',__DIR__.'/fixtures/repository-safelist-ko.json', 1, ['repository-safelist'=>["http://notpackagist.org/"]]),
         );
     }
 }

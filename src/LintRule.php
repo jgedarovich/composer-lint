@@ -4,7 +4,7 @@ namespace SLLH\ComposerLint;
 
 interface LintRule {
     /*
-     * @param Array $config - config parsed in from .composerlint / composerlintignore / config stanza of composer.json
+     * @param Array $config - config parsed in from .composerlint
      * @param Array $errors - an array to add erros to - this will be what gets returned
      * @return void
      */

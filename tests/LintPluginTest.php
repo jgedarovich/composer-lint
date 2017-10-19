@@ -106,7 +106,7 @@ final class LintPluginTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @expectedException  InvalidArgumentException
-     * @expectedExceptionMessage  The composer-linter requires some lint rules to be configured, typically by adding config to a file called .composerlintignore in the root of the projects repository
+     * @expectedExceptionMessage  The composer-linter requires some lint rules to be configured, typically by adding config to a file called .composerlint in the root of the projects repository. See: https://github.com/jgedarovich/composer-lint#configuration
      */
     public function testLintPluginNoConfig() {
         $plugin = new LintPlugin([]);

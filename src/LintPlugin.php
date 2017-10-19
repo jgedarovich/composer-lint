@@ -51,15 +51,15 @@ final class LintPlugin implements PluginInterface, EventSubscriberInterface
      */
     public function __construct( $config = [], $dir = "", $lint_rules = [])
     {
+        $composerlint_config_file = is_dir($dir) ? $dir.DIRECTORY_SEPARATOR.'.composerlint' : '.composerlint' ;
 
-        if( empty($config) &&  file_exists($dir.'/.composerlint') ) {
-            $this->config = json_decode(file_get_contents($dir.'/.composerlint'), true);
+        if( empty($config) &&  file_exists( $composerlint_config_file) ) {
+            $this->config = json_decode(file_get_contents($composerlint_config_file), true);
             if ( is_null($this->config) ) {
                 throw new \InvalidArgumentException('the .composerlint configuration file needs to be a well formed json file, received exception trying to decode .composerlint file: '.json_last_error_msg());
             }
         } elseif (empty($config) ) {
-            //TODO: add link to readme or docs describing the config file syntax
-            throw new \InvalidArgumentException('The composer-linter requires some lint rules to be configured, typically by adding config to a file called .composerlintignore in the root of the projects repository');
+            throw new \InvalidArgumentException('The composer-linter requires some lint rules to be configured, typically by adding config to a file called .composerlint in the root of the projects repository. See: https://github.com/jgedarovich/composer-lint#configuration');
         } else {
             $this->config = $config;
         }

@@ -26,14 +26,12 @@ class RepositoryUrlSafelistLintRule implements LintRule {
         $repository_urls = array_reduce(
             $repositories,
             function($acc, $repository): array {
-                //todo is repository an array ? check that url is a key?
                 $acc[] = $repository['url'];
                 return $acc;
             },
             []
         );
 
-eval(\Psy\sh());
         if ( 
             array_key_exists("repository-safelist", $this->config) &&
             is_array($this->config['repository-safelist']) 

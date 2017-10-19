@@ -44,29 +44,32 @@ final class LintPlugin implements PluginInterface, EventSubscriberInterface
      * it felt wierd to have the config for the linter exist
      * in the thing being linted - so I broke this out into separate file
      *
-     * todo make this not suck
+     * todo make this suck less
+     * @param array $config
+     * @param dir $dir
+     * @param ArrayOfLintRules $lint_rules
      */
-    public function __construct( $config = [] ){
-        // /vendor/jgedarovich/composer-lint/src/
-        if( empty($config) &&  file_exists('../../../../.composerlint') ) {
-            //todo try/catch error - or splt this confi gparsing login into another class
-            $this->config = json_decode(file_get_contents('../../../../.composerlint'), true);
+    public function __construct( $config = [], $dir = "", $lint_rules = [])
+    {
+
+        if( empty($config) &&  file_exists($dir.'/.composerlint') ) {
+            $this->config = json_decode(file_get_contents($dir.'/.composerlint'), true);
+            if ( is_null($this->config) ) {
+                throw new \InvalidArgumentException('the .composerlint configuration file needs to be a well formed json file, received exception trying to decode .composerlint file: '.json_last_error_msg());
+            }
+        } elseif (empty($config) ) {
+            //TODO: add link to readme or docs describing the config file syntax
+            throw new \InvalidArgumentException('The composer-linter requires some lint rules to be configured, typically by adding config to a file called .composerlintignore in the root of the projects repository');
         } else {
             $this->config = $config;
         }
-        $this->lint_rules = new ArrayOfLintRules();
-        $all_lint_rules = array_map(function($filename) {
-            return basename($filename, '.php');
-        },glob(dirname(__FILE__).'/LintRules/*.php'));
 
-        if ( isset($config['lint_rules']))  {
-            foreach ( $config['lint_rules'] as $lint_class_name => $lint_class_config ) {
-                //check if it's one of the available classes
-                if ( in_array($lint_class_name, $all_lint_rules) ) {
-                    $namespaced_lint_class_name=__NAMESPACE__."\\".$lint_class_name;
-                    //todo - make sure config is an array or some other type?
-                    $this->lint_rules[] = new $namespaced_lint_class_name($lint_class_config);
-                }
+        //make it testable
+        $this->lint_rules  = $lint_rules instanceof \SLLH\ComposerLint\ArrayOfLintRules ? $lint_rules : new \SLLH\ComposerLint\ArrayOfLintRules();
+
+        if ( isset($this->config['lint-rules']))  {
+            foreach ( $this->config['lint-rules'] as $lint_class_name => $lint_class_config ) {
+                $this->lint_rules->addLint($lint_class_name, $lint_class_config);
             }
         }
     }
@@ -100,7 +103,6 @@ final class LintPlugin implements PluginInterface, EventSubscriberInterface
      */
     public function command(CommandEvent $event)
     {
-         //eval(\Psy\sh());
         if ('validate' !== $event->getCommandName()) {
             return true;
         }

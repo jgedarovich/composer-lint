@@ -1,38 +1,32 @@
-# composer-lint
+# jgedarovich/composer-lint
+
+a fork of [https://github.com/Soullivaneuh/composer-lint](https://github.com/Soullivaneuh/composer-lint)
+
 
 composer-lint is a plugin for Composer.
 
 It extends the composer validate command with extra rules.
 
-[![Latest Stable Version](https://poser.pugx.org/sllh/composer-lint/v/stable)](https://packagist.org/packages/sllh/composer-lint)
-[![Latest Unstable Version](https://poser.pugx.org/sllh/composer-lint/v/unstable)](https://packagist.org/packages/sllh/composer-lint)
-[![License](https://poser.pugx.org/sllh/composer-lint/license)](https://packagist.org/packages/sllh/composer-lint)
-[![Dependency Status](https://www.versioneye.com/php/sllh:composer-lint/badge.svg)](https://www.versioneye.com/php/sllh:composer-lint)
-[![Reference Status](https://www.versioneye.com/php/sllh:composer-lint/reference_badge.svg)](https://www.versioneye.com/php/sllh:composer-lint/references)
-
-[![Total Downloads](https://poser.pugx.org/sllh/composer-lint/downloads)](https://packagist.org/packages/sllh/composer-lint)
-[![Monthly Downloads](https://poser.pugx.org/sllh/composer-lint/d/monthly)](https://packagist.org/packages/sllh/composer-lint)
-[![Daily Downloads](https://poser.pugx.org/sllh/composer-lint/d/daily)](https://packagist.org/packages/sllh/composer-lint)
-
-[![Build Status](https://travis-ci.org/Soullivaneuh/composer-lint.svg?branch=master)](https://travis-ci.org/Soullivaneuh/composer-lint)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Soullivaneuh/composer-lint/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Soullivaneuh/composer-lint/?branch=master)
-[![Code Climate](https://codeclimate.com/github/Soullivaneuh/composer-lint/badges/gpa.svg)](https://codeclimate.com/github/Soullivaneuh/composer-lint)
-[![Coverage Status](https://coveralls.io/repos/Soullivaneuh/composer-lint/badge.svg?branch=master)](https://coveralls.io/r/Soullivaneuh/composer-lint?branch=master)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/69dec7a4-61a0-4760-bfa2-d3167ae52630/mini.png)](https://insight.sensiolabs.com/projects/69dec7a4-61a0-4760-bfa2-d3167ae52630)
-
 ## Installation
 
-You can install it either globally (recommended):
+add the following to your projects composer.json repositories section:
+```json
+"repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/jgedarovich/composer-lint"
+    }
+]
+```
+then run:
 
 ```bash
-composer global require sllh/composer-lint
+composer require jgedarovich/composer-lint
 ```
 
-or locally:
+then configure it by adding a `.composerlint` file to the root of your
+repository, \( [see below](#Configuration) \).
 
-```bash
-composer require sllh/composer-lint
-```
 
 ## Usage
 
@@ -42,24 +36,18 @@ Just run `composer validate` command to see the plugin working.
 
 ## Configuration
 
-You can configure the plugin via the [`COMPOSER_HOME/config.json`](https://getcomposer.org/doc/03-cli.md#composer-home) file. Here is the default one:
+You can configure the plugin via a file called `/.composerlint` in the root
+ of your repository
 
 ```json
 {
-    "config": {
-        "sllh-composer-lint": {
-            "php": true,
-            "type": true,
-            "minimum-stability": true,
-            "version-constraints": true
-        },
-        "sort-packages": false
+    "lint-rules": {
+        "lint-rule-class-name-here": [ "optional-lint-rule-config-here" ],
+        "lint-rule-class-name-here": [ "optional-lint-rule-config-here" ],
+        "lint-rule-class-name-here": [ "optional-lint-rule-config-here" ],
     }
 }
 ```
 
-* `php`: Checks if the PHP requirement is set on the `require` section.
-* `type`: Check if package `type` is defined.
-* `minimum-stability`: Checks if `minimum-stability` is set. It raises an error if it is, except for `project` packages.
-* `version-constraints`: Checks if version constraint formats are valid (e.g. `~2.0` should be `^2.0`).
-* `sort-packages`: Checks if packages are sorted on each section. This option is outside `sllh-composer-lint` because it's a composer native one.
+where 'lint-rule-class-name's  are any of the classes from the
+[src/LintRules/](src/LintRules) directory

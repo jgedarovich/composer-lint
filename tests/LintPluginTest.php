@@ -13,6 +13,8 @@ use Composer\Plugin\PluginInterface;
 use Composer\Plugin\PluginManager;
 use SLLH\ComposerLint\LintPlugin;
 use Symfony\Component\Console\Output\NullOutput;
+use org\bovigo\vfs\vfsStream;
+use SLLH\ComposerLint\ArrayOfLintRules;
 
 /**
  * @author Sullivan Senechal <soullivaneuh@gmail.com>
@@ -49,16 +51,91 @@ final class LintPluginTest extends \PHPUnit_Framework_TestCase
         $this->composer->setPackage(new RootPackage('root/root', '1.0.0', '1.0.0'));
     }
 
+    public function testLintPluginConfigFromArrayNotFile() {
+
+        $config = [
+            "lint-rules" => [
+                '\SLLH\ComposerLint\PhpLintRule' => [],
+                '\SLLH\ComposerLint\TypeLintRule' => [],
+            ]
+        ];
+
+
+        $lint_rules = $this->createMock('\SLLH\ComposerLint\ArrayOfLintRules');
+        $lint_rules->expects($this->exactly(2))
+            ->method('addLint')
+            ->withConsecutive(
+                [$this->equalTo('\SLLH\ComposerLint\PhpLintRule'), $this->equalTo([])],
+                [$this->equalTo('\SLLH\ComposerLint\TypeLintRule'), $this->equalTo([])]
+            );
+        $this->root = vfsStream::setup();
+        vfsStream::newFile(".composerlint")
+            ->withContent(json_encode(
+                    [
+                        "lint-rules"=> [
+                            "\SLLH\ComposerLint\SecureHttpLintRule"=> []
+                        ]
+                    ]
+                )
+            )->at($this->root);
+        $plugin = new LintPlugin($config, $this->root->url(), $lint_rules);
+    }
+
+    public function testLintPluginConfigFromfile() {
+
+        $lint_rules = $this->createMock('\SLLH\ComposerLint\ArrayOfLintRules');
+        $lint_rules->expects($this->exactly(2))
+            ->method('addLint')
+            ->withConsecutive(
+                [$this->equalTo('\SLLH\ComposerLint\TypeLintRule'), $this->equalTo([])],
+                [$this->equalTo('\SLLH\ComposerLint\SecureHttpLintRule'), $this->equalTo([])]
+            );
+        $this->root = vfsStream::setup();
+        vfsStream::newFile(".composerlint")
+            ->withContent(json_encode(
+                    [
+                        "lint-rules"=> [
+                            "\SLLH\ComposerLint\TypeLintRule"=> [],
+                            "\SLLH\ComposerLint\SecureHttpLintRule"=> []
+                        ]
+                    ]
+                )
+            )->at($this->root);
+        $plugin = new LintPlugin([], $this->root->url(), $lint_rules);
+    }
+    /**
+     * @test
+     * @expectedException  InvalidArgumentException
+     * @expectedExceptionMessage  The composer-linter requires some lint rules to be configured, typically by adding config to a file called .composerlintignore in the root of the projects repository
+     */
+    public function testLintPluginNoConfig() {
+        $plugin = new LintPlugin([]);
+    }
+
+    /**
+     * @test
+     * @expectedException  InvalidArgumentException
+     * @expectedExceptionMessage  the .composerlint configuration file needs to be a well formed json file, received exception trying to decode .composerlint file: Syntax error
+     */
+    public function testLintPluginConfigFileIsBad() {
+
+        $this->root = vfsStream::setup();
+        vfsStream::newFile(".composerlint")
+            ->withContent("not json")->at($this->root);
+        $plugin = new LintPlugin([], $this->root->url());
+    }
+
     public function testValidateCommand()
     {
         $config = [
-            "lint_rules" => [
+            "lint-rules" => [
                 'SortedPackagesLintRule' => [],
                 'PhpLintRule' => [],
                 'TypeLintRule' => [],
                 'VersionConstraintsLintRule' => [],
             ]
         ];
+
         $this->addComposerPlugin(new LintPlugin($config));
 
         $input = $this->createMock('Symfony\Component\Console\Input\InputInterface');
@@ -81,18 +158,11 @@ EOF
 
     public function testValidateWithConfigCommand()
     {
-        $this->config->merge(array(
-            'config' => array(
-                'sllh-composer-lint' => array(
-                    'php' => false,
-                    'type' => false,
-                    'version-constraints' => false,
-                ),
-            ),
-        ));
         $config = [
-            "lint_rules" => [
-                'SortedPackagesLintRule' => [],
+            "lint-rules" => [
+                'PhpLintRule' => [],
+                'TypeLintRule' => [],
+                'VersionConstraintsLintRule' => [],
             ]
         ];
         $this->addComposerPlugin(new LintPlugin($config));
@@ -105,8 +175,9 @@ EOF
 
         $this->assertSame(1, $this->composer->getEventDispatcher()->dispatch($commandEvent->getName(), $commandEvent));
         $this->assertSame(<<<'EOF'
-Links under require section are not sorted.
-Links under require-dev section are not sorted.
+You must specify the PHP requirement.
+The package type is not specified.
+Requirement format of 'sllh/php-cs-fixer-styleci-bridge:~2.0' is not valid. Should be '^2.0'.
 
 EOF
             , $this->io->getOutput());
@@ -118,11 +189,11 @@ EOF
     public function testDummyCommand()
     {
         $config = [
-            "lint_rules" => [
-                'SortedPackagesLintRule' => true,
+            "lint-rules" => [
+                'SortedPackagesLintRule' => [],
             ]
         ];
-        $this->addComposerPlugin(new LintPlugin());
+        $this->addComposerPlugin(new LintPlugin($config));
 
         $input = $this->createMock('Symfony\Component\Console\Input\InputInterface');
         $input->expects($this->never())->method('getArgument')->with('file');

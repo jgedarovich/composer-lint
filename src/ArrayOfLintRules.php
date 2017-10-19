@@ -29,7 +29,7 @@ class ArrayOfLintRules extends ArrayObject {
     public function addLint($lint_class_name, array $lint_class_config) {
 
         if ( in_array($lint_class_name, $this->all_lint_rules) ) {
-            $namespaced_lint_class_name=__NAMESPACE__."\\".$lint_class_name;
+            $namespaced_lint_class_name="\\".__NAMESPACE__."\\".$lint_class_name;
             $this->append(new $namespaced_lint_class_name($lint_class_config));
         } else {
             throw new \InvalidArgumentException('can only add classes of type LintRule');

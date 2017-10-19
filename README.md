@@ -41,7 +41,7 @@ You can configure the plugin via a file called `/.composerlint` in the root
 
 ```json
 {
-    "lint-rules": {
+    "lint-rules":{
         "lint-rule-class-name-here": [ "optional-lint-rule-config-here" ],
         "lint-rule-class-name-here": [ "optional-lint-rule-config-here" ],
         "lint-rule-class-name-here": [ "optional-lint-rule-config-here" ],

@@ -53,7 +53,7 @@ class NoFilesAutoloaderLintRule implements LintRule {
     function __construct( Array $config = [], $dir= "." ) {
         $this->config = $config;
         $this->files_safelist = isset($config['ignore']) && is_array($config['ignore']) ? $config['ignore'] :[];
-        $this->custom_comment = isset($config['custom-comment']) && is_array($config['custom-comment']) ? $config['custom-comment'] : "";
+        $this->custom_comment = isset($config['custom-comment']) && is_string($config['custom-comment']) ? $config['custom-comment'] : "";
         $analyzer = new \JMS\Composer\DependencyAnalyzer();
 
         /*
@@ -100,9 +100,8 @@ class NoFilesAutoloaderLintRule implements LintRule {
                 $files_error_string = $files_error_string . "     ".$file_path_string."\n";
             }
 
-            //TODO custom error message here
             if ( $this->custom_comment !== "" ) {
-                $files_error_string = $this->custom_comment;
+                $files_error_string .= $this->custom_comment;
             }
         }
         if ( strlen($files_error_string) > 0 ) {
